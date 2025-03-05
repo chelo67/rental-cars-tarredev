@@ -2,14 +2,8 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -29,8 +23,8 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${outfit.className}`}>
-          
           {children}
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
