@@ -21,8 +21,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { UploadButton } from "@/utils/uploadthing";
+import { useState } from "react";
 
-export function FormAddCar() {
+export function FormAddCar({ onClose }: { onClose: () => void }) {
+
+  const [photoUploaded, setPhotoUploaded] = useState(false)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,6 +45,7 @@ export function FormAddCar() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
+    onClose();
   };
   return (
     <Form {...form}>
@@ -98,7 +104,7 @@ export function FormAddCar() {
             )}
           />
 
-        <FormField
+          <FormField
             control={form.control}
             name="people"
             render={({ field }) => (
@@ -125,7 +131,7 @@ export function FormAddCar() {
             )}
           />
 
-        <FormField
+          <FormField
             control={form.control}
             name="engine"
             render={({ field }) => (
@@ -151,8 +157,71 @@ export function FormAddCar() {
               </FormItem>
             )}
           />
+          
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Type</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select the type of car" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="sedan">Sedán</SelectItem>
+                    <SelectItem value="suv">SUV</SelectItem>
+                    <SelectItem value="coupe">Coupe</SelectItem>
+                    <SelectItem value="familiar">Familiar</SelectItem>
+                    <SelectItem value="luxe">De luxe</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="photo"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Car Image</FormLabel>
+                  <FormControl>
+
+                    {photoUploaded ?
+                      <p className="text-sm">Photo uploaded</p>  
+                      : (
+                        <UploadButton
+                          className="rounded-lg bg-slate-600/20 text-slate-800 outline-dotted outline-3"
+                          {...field}
+                          endpoint="photo"
+                      onClientUploadComplete={(res) => {
+                        form.setValue("photo", res?.[0]?.url)
+                        setPhotoUploaded(true)
+                      }}
+                      onUploadError={(error) => {
+                        console.log(error)
+                      }}
+                    />
+                  )}
+                  </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
-        <Button type="submit">Submit</Button>
+        <div className="mt-4 flex justify-end space-x-2">
+          <Button variant="outline" onClick={onClose}>
+            Cancelar
+          </Button>
+          <Button type="submit">Guardar</Button>
+        </div>
       </form>
     </Form>
   );

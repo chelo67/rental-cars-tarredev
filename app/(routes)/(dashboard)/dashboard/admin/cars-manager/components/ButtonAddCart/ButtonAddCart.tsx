@@ -16,7 +16,7 @@ export function ButtonAddCart() {
     const [openDialog, setOpenDialog] = useState(false)
 
   return (
-    <Dialog open={openDialog}>
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogTrigger asChild>
             <Button variant="outline" onClick={() => setOpenDialog(true)}>
                 Add new car
@@ -30,7 +30,7 @@ export function ButtonAddCart() {
                     Fill out the form below to add a new car to your inventory.
                 </DialogDescription>
             </DialogHeader>
-            <FormAddCar />
+            <FormAddCar onClose={() => setOpenDialog(false)} />
         </DialogContent>
     </Dialog>
   )
