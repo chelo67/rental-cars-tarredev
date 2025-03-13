@@ -47,6 +47,9 @@ export function FormAddCar({ onClose }: { onClose: () => void }) {
     console.log(values);
     onClose();
   };
+
+  const {isValid} = form.formState;
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -215,12 +218,24 @@ export function FormAddCar({ onClose }: { onClose: () => void }) {
               </FormItem>
             )}
           />
+          
+          <FormField
+            control={form.control}
+            name="priceDay"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Price per day</FormLabel>
+                  <FormControl>
+                    <Input placeholder="20$" {...field} />
+                  </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
         <div className="mt-4 flex justify-end space-x-2">
-          <Button variant="outline" onClick={onClose}>
-            Cancelar
-          </Button>
-          <Button type="submit">Guardar</Button>
+          
+          <Button type="submit" className="w-full mt-5" disabled={!isValid}>Create car</Button>
         </div>
       </form>
     </Form>
